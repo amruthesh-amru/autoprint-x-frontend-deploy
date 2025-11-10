@@ -113,17 +113,19 @@ const PrintOptionsForm = () => {
       // Validate the form
       const isValid = validateForm(newOptions);
 
-      // Only dispatch if validation passes or if it's a field that doesn't affect core functionality
-      if (
-        isValid ||
-        name === "paperSize" ||
-        name === "color" ||
-        name === "orientation" ||
-        name === "duplex" ||
-        name === "binding"
-      ) {
-        dispatch(setOption(newOptions));
-      }
+      // Schedule dispatch to happen after render
+      setTimeout(() => {
+        if (
+          isValid ||
+          name === "paperSize" ||
+          name === "color" ||
+          name === "orientation" ||
+          name === "duplex" ||
+          name === "binding"
+        ) {
+          dispatch(setOption(newOptions));
+        }
+      }, 0);
 
       return newOptions;
     });

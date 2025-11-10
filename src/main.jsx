@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
@@ -9,7 +8,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { CartFileProvider } from "./contexts/CartFileContext";
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// TODO: Replace with your actual Stripe publishable key
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder"
+);
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>

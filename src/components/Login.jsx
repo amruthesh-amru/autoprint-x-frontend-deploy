@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCustomer } from "@/app/slices/userSlice"; // Import your Redux action
@@ -27,6 +27,11 @@ const Login = () => {
       console.log("Login successful:", response);
       console.log("Login successful:", response.data);
 
+      // Store token in localStorage if provided by backend
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+
       // We use the response userId, role, and also include the email from formData.
       const customerData = {
         id: response.data.userId,
@@ -37,8 +42,10 @@ const Login = () => {
       // Dispatch the setCustomer action to store the user info in Redux
       dispatch(setCustomer(customerData));
 
-      // Navigate to home page (or any protected route)
-      navigate("/");
+      // Use setTimeout to ensure Redux state is updated before navigation
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
     } catch (error) {
       console.error("Error during login:", error);
     }

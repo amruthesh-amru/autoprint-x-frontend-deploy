@@ -18,15 +18,17 @@ import { API } from "@/utils/api";
 import Header from "./Header";
 
 // Stripe public key - Replace with your actual public key
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// TODO: Add your actual Stripe publishable key to environment variables
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder"
+);
 
 const Cart = () => {
-  const { getCartFile, clearCartFiles } = useCartFiles();
+  const { getCartFile } = useCartFiles();
   const navigate = useNavigate();
 
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
   const [cartTotal, setCartTotal] = useState(0);
 
   // Calculate total cost for all cart items
@@ -63,15 +65,13 @@ const Cart = () => {
 
   // Proceed to checkout (Stripe integration)
   const handleCheckout = async () => {
-    const totalCost = calculateTotalCost();
-    console.log(totalCost);
-
+    console.log(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
     try {
       // Call your backend to create a Stripe checkout session
       const response = await axios.post(
         API.CREATE_CHECKOUT_SESSION,
         {
-          amount: totalCost,
+          amount: cartTotal,
           cartItems: cartItems,
         },
         { withCredentials: true }

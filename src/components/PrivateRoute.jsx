@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 
 const PrivateRoute = () => {
-  // Replace 'authToken' with your actual cookie name
-  const token = Cookies.get("token");
+  // Check if user is logged in by looking at Redux state
+  const customer = useSelector((state) => state.user.customer);
 
-  // Optionally, you could also check for user info stored in your Redux state
-  return token ? <Outlet /> : <Navigate to="/login" />;
+  // If customer exists in Redux state, allow access to protected routes
+  return customer ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
